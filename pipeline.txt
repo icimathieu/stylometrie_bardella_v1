@@ -1,0 +1,138 @@
+PIPELINE — VÉRIFICATION STYLOMÉTRIQUE
+(oral transcrit ↔ textes écrits)
+
+⸻
+
+	1.	OBJECTIF
+
+Tester la compatibilité stylistique entre :
+	•	des textes écrits attribués à une même personne (livres),
+	•	et des productions orales transcrites de cette personne (interviews),
+
+afin d’évaluer si les deux ensembles relèvent plausiblement d’une même signature stylistique, en tenant compte des différences de registre entre oral et écrit.
+
+⸻
+
+	2.	FORMULATION DES HYPOTHÈSES
+
+H₀ (compatibilité) :
+Le style des livres est compatible avec le style observable dans les interviews transcrites, compte tenu de la variation attendue entre oral et écrit : Jordan Bardella a bien écrit ses livres.
+
+H₁ (incompatibilité) :
+Le style des livres est statistiquement distinct du style observable dans les interviews transcrites, au-delà de ce qu’explique la différence de registre : l'auctorialité est donc falsifiée.
+
+⸻
+
+	3.	CONSTITUTION DES CORPUS
+
+3.1 Corpus écrit (E)
+	•	Livres attribués à Jordan Bardella
+	•	Découpage en segments homogènes (blocs  1 000).
+
+3.2 Corpus oral transcrit (O)
+	•	Interviews transcrites intégralement avec le modèle Whisper d'OpenAI.
+	•	Découpage en segments de taille comparable au corpus écrit.
+
+3.3 Corpus de contrôle (C)
+	•	Textes et/ou interviews d’un autre individu comparable (même époque, même genre discursif) : ici 3 livres de Nicolas Sarkozy sur la même période.
+
+⸻
+structuration json : 
+
+{
+  "source": "livre.epub",
+  "chapters": [
+    {
+      "id": 0,
+      "title": "Introduction",
+      "paragraphs": [
+        "La politique est d’abord une affaire de langage.",
+        "Elle suppose une mise en récit du réel."
+      ]
+    }
+  ]
+}
+⸻
+
+	4.	PRÉTRAITEMENT DES TEXTES
+
+Appliquer exactement les mêmes opérations à tous les corpus.
+
+4.1 Normalisation
+	•	Passage en minuscules.
+	•	Normalisation des apostrophes, tirets, espaces.
+	•	Suppression des citations longues.
+
+4.2 Nettoyage contrôlé
+	•	Suppression ou neutralisation des noms propres fortement thématiques.
+	•	Pas de lemmatisation lourde.
+	•	Pas de correction stylistique manuelle.
+
+Objectif : conserver le style brut, indépendamment du contenu.
+
+⸻
+
+	5.	EXTRACTION DES TRAITS STYLOMÉTRIQUES
+
+5.1 Traits principaux (robustes oral/écrit)
+	•	N-grammes de caractères (3-grams, 4-grams).
+	•	Fréquences relatives des mots-outils.
+
+5.2 Traits complémentaires
+	•	Marques discursives (ex. : « en fait », « je pense que », « donc », « cependant »).
+	•	Statistiques de phrases :
+	•	longueur moyenne,
+	•	variance,
+	•	proportion de phrases courtes.
+
+⸻
+
+	6.	CONTRÔLES INTERNES (OBLIGATOIRES)
+
+6.1 Cohérence interne du corpus écrit
+	•	Comparaison E ↔ E (livre 1 vs livre 2, chapitres entre eux).
+
+6.2 Cohérence interne du corpus oral
+	•	Comparaison O ↔ O (interviews entre elles).
+
+Si l’un des deux corpus n’est pas cohérent, la comparaison croisée devient non interprétable.
+
+⸻
+
+	7.	COMPARAISONS STYLOMÉTRIQUES
+
+7.1 Représentation vectorielle
+	•	Chaque segment est représenté par un vecteur de traits stylométriques.
+
+7.2 Mesures de distance
+	•	Similarité cosinus,
+	•	et/ou Burrows’ Delta.
+
+7.3 Comparaisons effectuées
+	•	E ↔ E
+	•	O ↔ O
+	•	E ↔ O
+	•	E ↔ C (si corpus de contrôle disponible)
+
+⸻
+
+	8.	INTERPRÉTATION DES RÉSULTATS
+
+Cas attendu si auctorialité plausible :
+	•	distance(E ↔ O) ≈ distance(E ↔ E) ≈ distance(O ↔ O)
+
+Cas signalant une incompatibilité stylométrique :
+	•	distance(E ↔ O) >> distance(E ↔ E)
+	•	et distance(E ↔ O) >> distance(O ↔ O)
+
+Renforcement du signal si :
+	•	distance(E ↔ C) < distance(E ↔ O)
+
+⸻
+
+	9.	LIMITES ET PRÉCAUTIONS
+
+	•	La stylométrie ne fournit pas de preuve formelle d’auctorialité.
+	•	Les différences oral / écrit introduisent une variation structurelle.
+	•	Les résultats dépendent fortement du protocole de transcription.
+	•	Toute conclusion doit être formulée en termes de compatibilité ou d’incompatibilité stylistique.

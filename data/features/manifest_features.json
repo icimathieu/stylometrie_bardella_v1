@@ -1,0 +1,16 @@
+{
+  "n_segments": 650,
+  "segments_by_corpus": {
+    "E": 144,
+    "O": 123,
+    "C": 383
+  },
+  "top_k_char_ngrams": 500,
+  "short_sentence_threshold": 8,
+  "normalize": true,
+  "files": {
+    "handcrafted": "data/features/features_handcrafted.csv",
+    "char_ngrams": "data/features/features_char_ngrams.csv",
+    "vocabulary": "data/features/char_ngram_vocabulary.json"
+  }
+}

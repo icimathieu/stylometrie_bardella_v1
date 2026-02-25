@@ -1,0 +1,25 @@
+# Environnements virtuels
+.venv/
+
+# data / résultats
+data/livres_bardella
+data/livres_sarkozy
+data/trash/Sarkozy journal d'un prisonnier.pdf
+data/blocks2/blocks_livres_bardella.json
+data/blocks2/blocks_livres_sarkozy.json
+cache/
+
+# Fichiers système
+.DS_Store
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+
+# Autre
+youtube_cookies.txt
+README_opt.md
